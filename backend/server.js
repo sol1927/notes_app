@@ -17,7 +17,7 @@ app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
 });
 
@@ -28,10 +28,11 @@ app.use(
         return callback(null, true);
       }
 
+      console.error("Blocked CORS origin:", origin, "Allowed:", env.clientUrls);
       return callback(new Error("CORS origin not allowed"));
     },
     credentials: true,
-  })
+  }),
 );
 
 app.get("/health", (_req, res) => {
